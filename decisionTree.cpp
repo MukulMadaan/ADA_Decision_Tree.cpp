@@ -43,9 +43,14 @@ void sortedprintInfo(decisionTree* root, int x) {
 }
 
 //Find the group number
-void findGroup(int number) {
+void findGroup(decisionTree* root,int number) {
 	
-	cout<<"The Group Number in which the element is: "<<number%10;
+	int groupNumber = number%10;
+	if(find(root->group[groupNumber]->element.begin(), root->group[groupNumber]->element.end(), number) != root->group[groupNumber]->element.end()) {
+		cout<<"\nThe Element is in group number "<<number%10<<endl; 
+	} else {
+		cout<<"\nElement is Not present in any group \n";
+	}
 	
 }
 
@@ -54,7 +59,21 @@ void newElement(decisionTree* root, int number){
 	
 	int groupNumber = number%10;
 	root->group[groupNumber]->element.push_back(number);
-	
+	cout<<number<<" has been inserted to group number "<<groupNumber<<endl;
+}
+
+//Delete a Number
+void delElement(decisionTree* root, int number) {
+	int groupNumber = number%10;
+	vector<int>:: iterator it;
+	if(find(root->group[groupNumber]->element.begin(), root->group[groupNumber]->element.end(), number) != root->group[groupNumber]->element.end()) {
+		it = find(root->group[groupNumber]->element.begin(), root->group[groupNumber]->element.end(), number);
+		root->group[groupNumber]->element.erase(it);
+		cout<<endl;
+		cout<<number<<" is deleted from group number "<<groupNumber<<endl;
+	} else {
+		cout<<"\nElement is Not present in any group\n";
+	}
 }
 
 //Logic to create the group
@@ -91,16 +110,23 @@ int main() {
 	}
 	
 	createGroup(root, input);
-	findGroup(33);
+	
+//	int x;
+//	cin>>x;
+//	newElement(root, x);
+	
 	int gNumber;
 	int flag = 1;
+
 	while(flag){
 		cout<<"\nEnter the Group that you want to display:\t";
 		cin>>gNumber;
 		printInfo(root,gNumber);
 		cout<<"\nOkay. Now in an organised fashion\n";
 		sortedprintInfo(root,gNumber);
+//		delElement(root, x);
 		cout<<"\nDo you Wish to Continue?\t";
 		cin>>flag;
+		cout<<endl;
 	}
 }
